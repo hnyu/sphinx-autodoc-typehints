@@ -40,7 +40,7 @@ def get_annotation_class_name(annotation, module: str) -> str:
 
     if getattr(annotation, '__qualname__', None):
         return annotation.__qualname__
-    elif getattr(annotation, '_name', None):  # Required for generic aliases on Python 3.7+
+    elif isinstance(getattr(annotation, '_name', None), str):  # Required for generic aliases on Python 3.7+
         return annotation._name
     elif (module in ('typing', 'typing_extensions')
             and isinstance(getattr(annotation, 'name', None), str)):
@@ -51,7 +51,7 @@ def get_annotation_class_name(annotation, module: str) -> str:
     if origin:
         if getattr(origin, '__qualname__', None):  # Required for Protocol subclasses
             return origin.__qualname__
-        elif getattr(origin, '_name', None):  # Required for Union on Python 3.7+
+        elif isinstance(getattr(origin, '_name', None), str):  # Required for Union on Python 3.7+
             return origin._name
         else:
             return origin.__class__.__qualname__.lstrip('_')  # Required for Union on Python < 3.7
